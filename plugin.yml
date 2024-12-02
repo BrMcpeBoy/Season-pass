@@ -1,0 +1,16 @@
+name: SeasonPass
+version: 3.0.0
+main: TungstenVn\SeasonPass\SeasonPass
+api: 5.0.0
+author: TungstenVn, NoobMCBG
+description: UP PM4 By NoobMCBG
+
+permissions:
+  seasonpass.command.additem:
+    default: op
+  seasonpass.command.removeitem:
+    default: op
+  seasonpass.command.setitem:
+    default: op
+  seasonpass.royalpass:
+    default: op
