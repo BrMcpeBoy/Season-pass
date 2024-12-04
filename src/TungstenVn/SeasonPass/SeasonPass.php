@@ -2,11 +2,13 @@
 
 namespace TungstenVn\SeasonPass;
 
+use PHPUnit\TextUI\XmlConfiguration\Logging\Junit;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player; 
 use pocketmine\Server;
 use pocketmine\event\Listener;
 use pocketmine\event\Event;
+use pocketmine\utils\Config;
 use TungstenVn\SeasonPass\commands\commands;
 use muqsit\invmenu\InvMenuHandler;
 use jojoe77777\FormAPI\SimpleForm;
@@ -16,6 +18,8 @@ class SeasonPass extends PluginBase implements Listener {
     public $levelApi;
 
     public static self $instance;
+
+    public Config $data;
 
     public static function getInstance(): self {
         return self::$instance;
@@ -27,6 +31,8 @@ class SeasonPass extends PluginBase implements Listener {
         if(!InvMenuHandler::isRegistered()){
             InvMenuHandler::register($this);
         }
+
+        $this->data = new Config($this->getDataFolder() . "data.json", Config::JSON);
 
         $this->levelApi = $this->getServer()->getPluginManager()->getPlugin("MineLevel");
         if($this->levelApi == null){

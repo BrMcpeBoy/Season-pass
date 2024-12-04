@@ -86,7 +86,7 @@ class menuHandle implements Listener
             if (!in_array($slotId, $legalSlot)) {
                 $sound = new soundHandle($this);
                 $sound->illigelSound($player);
-                $item = VanillaBlocks::OAK_TRAPDOOR()->setCustomName("§r§as§l【 §fThông báo §a】");
+                $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§as§l【 §fThông báo §a】");
                 $item->setLore(["§r§cMục này không thể được chạm vào"]);
                 $this->menu->getInventory()->setItem(52, $item);
                 $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
