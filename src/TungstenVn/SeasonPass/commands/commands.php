@@ -6,7 +6,6 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\plugin\PluginOwned;
 use pocketmine\player\Player;
-use pocketmine\plugin\Plugin;
 use pocketmine\event\Listener;
 use TungstenVn\SeasonPass\SeasonPass;
 use TungstenVn\SeasonPass\subCommands\addItem;
@@ -22,6 +21,7 @@ class commands extends Command implements PluginOwned, Listener {
 
     public function __construct(SeasonPass $ssp){
         parent::__construct("seasonpass", "Season Pass", ("/seasonpass help"), ["ssp"]);
+        $this->setPermission("seasonpass.command");
         $this->ssp = $ssp;
     }
 

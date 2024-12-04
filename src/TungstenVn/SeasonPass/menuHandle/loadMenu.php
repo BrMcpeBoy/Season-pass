@@ -4,6 +4,7 @@ namespace TungstenVn\SeasonPass\menuHandle;
 
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 
 class loadMenu
@@ -24,16 +25,16 @@ class loadMenu
                         if ($x == 0) {
                             $item = $mnh->cmds->ssp->getConfig()->getNested('normalPass')[$y];
                             //$item = unserialize(utf8_decode($item));
-                            $item = Item::jsonDeserialize($item);
+                            $item = Item::legacyJsonDeserialize($item);
                             $mnh->menu->getInventory()->setItem($slotId, $item);
                         } else {
                             $item = $mnh->cmds->ssp->getConfig()->getNested('royalPass')[$y];
                             //$item = unserialize(utf8_decode($item));
-                            $item = Item::jsonDeserialize($item);
+                            $item = Item::legacyJsonDeserialize($item);
                             $mnh->menu->getInventory()->setItem($slotId, $item);
                         }
                     } else if ($matrix[$x][$y] == "n") {
-                        $mnh->menu->getInventory()->setItem($slotId, ItemFactory::getInstance()->get(0, 0, 0));
+                        $mnh->menu->getInventory()->setItem($slotId, VanillaItems::AIR());
                     } else if ($matrix[$x][$y] == "taken") {
                         $mnh->menu->getInventory()->setItem($slotId, ItemFactory::getInstance()->get(241, 5, 1));
                     } else if ($matrix[$x][$y] == "none") {
