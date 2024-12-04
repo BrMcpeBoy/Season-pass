@@ -2,11 +2,7 @@
 
 namespace TungstenVn\SeasonPass\menuHandle;
 
-use pocketmine\block\utils\DyeColor;
-use pocketmine\block\VanillaBlocks;
-use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
-use pocketmine\item\VanillaItems;
+use pocketmine\item\{Item, StringToItemParser, LegacyStringToItemParser};
 use pocketmine\player\Player;
 
 class loadMenu
@@ -27,25 +23,25 @@ class loadMenu
                         if ($x == 0) {
                             $item = $mnh->cmds->ssp->getConfig()->getNested('normalPass')[$y];
                             //$item = unserialize(utf8_decode($item));
-                            $item = Item::legacyJsonDeserialize($item);
+                            $item = Item::jsonDeserialize($item);
                             $mnh->menu->getInventory()->setItem($slotId, $item);
                         } else {
                             $item = $mnh->cmds->ssp->getConfig()->getNested('royalPass')[$y];
                             //$item = unserialize(utf8_decode($item));
-                            $item = Item::legacyJsonDeserialize($item);
+                            $item = Item::jsonDeserialize($item);
                             $mnh->menu->getInventory()->setItem($slotId, $item);
                         }
                     } else if ($matrix[$x][$y] == "n") {
-                        $mnh->menu->getInventory()->setItem($slotId, VanillaItems::AIR());
+                        $mnh->menu->getInventory()->setItem($slotId, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                     } else if ($matrix[$x][$y] == "taken") {
-                        $mnh->menu->getInventory()->setItem($slotId, VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::GREEN));
+                        $mnh->menu->getInventory()->setItem($slotId, LegacyStringToItemParser::getInstance()->parse(241, 5, 1));
                     } else if ($matrix[$x][$y] == "none") {
-                        $mnh->menu->getInventory()->setItem($slotId, VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED));
+                        $mnh->menu->getInventory()->setItem($slotId, LegacyStringToItemParser::getInstance()->parse(241, 14, 1));
                     } else if ($matrix[$x][$y] == "crossline") {
-                        $mnh->menu->getInventory()->setItem($slotId, VanillaItems::PAPER());
+                        $mnh->menu->getInventory()->setItem($slotId, LegacyStringToItemParser::getInstance()->parse(399, 0, 1));
                     }
                 } else {
-                    $mnh->menu->getInventory()->setItem($slotId, VanillaItems::AIR());
+                    $mnh->menu->getInventory()->setItem($slotId, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                 }
             }
         }
