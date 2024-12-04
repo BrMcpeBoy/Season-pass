@@ -2,12 +2,9 @@
 
 namespace TungstenVn\SeasonPass\menuHandle;
 
-use pocketmine\block\utils\DyeColor;
-use pocketmine\block\VanillaBlocks;
-use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use TungstenVn\SeasonPass\commands\commands;
-use pocketmine\item\Item;
+use pocketmine\item\{Item, StringToItemParser, LegacyStringToItemParser};
 use pocketmine\item\ItemFactory;
 use pocketmine\event\Listener;
 use pocketmine\inventory\PlayerCursorInventory;
@@ -57,17 +54,19 @@ class menuHandle implements Listener
         }
         $ev->cancel();
         $acts = array_values($ev->getTransaction()->getActions());
-
+        if ($acts[0] instanceof CreativeInventoryAction || $acts[1] instanceof CreativeInventoryAction) {
+            return;
+        }
         if ($this->check_instance($acts[0], "win10") && $this->check_instance($acts[1], "win10") || $this->check_instance($acts[0], "phone") && $this->check_instance($acts[1], "phone")) {
             if ($acts[0] instanceof SlotChangeAction && $acts[1] instanceof SlotChangeAction) {
                 //check mobile move
                 if (!$acts[0]->getInventory() instanceof PlayerCursorInventory and !$acts[1]->getInventory() instanceof PlayerCursorInventory) {
                     $sound = new soundHandle($this);
                     $sound->illigelSound($player);
-                    $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§a§l【 §fThông báo §a】");
-                    $item->setLore(["§r§cThả một mục để xác nhận, không di chuyển nó đến một nơi khác trên menu"]);
+                    $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+                    $item->setLore(["§r§cDrop an item to confirm, do not move it to another place on the menu"]);
                     $this->menu->getInventory()->setItem(52, $item);
-                    $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                    $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                     return;
                 }
             }
@@ -86,10 +85,10 @@ class menuHandle implements Listener
             if (!in_array($slotId, $legalSlot)) {
                 $sound = new soundHandle($this);
                 $sound->illigelSound($player);
-                $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§as§l【 §fThông báo §a】");
-                $item->setLore(["§r§cMục này không thể được chạm vào"]);
+                $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+                $item->setLore(["§r§cThis item cannot be touched."]);
                 $this->menu->getInventory()->setItem(52, $item);
-                $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                 return;
             }
 
@@ -107,32 +106,32 @@ class menuHandle implements Listener
                     if ($this->corner[1] == 0) {
                         $sound = new soundHandle($this);
                         $sound->illigelSound($player);
-                        $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§a§l【 §fThông báo §a】");
-                        $item->setLore(["§r§cKhông thể di chuyển sang trái nữa :3"]);
+                        $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+                        $item->setLore(["§r§cCan't move left anymore :3"]);
                         $this->menu->getInventory()->setItem(52, $item);
-                        $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                        $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                         return;
                     }
                     $sound->moveRightLeft($player);
                     $this->corner[1] -= 7;
-                    $this->menu->getInventory()->setItem(52, VanillaItems::AIR());
-                    $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                    $this->menu->getInventory()->setItem(52, LegacyStringToItemParser::getInstance()->parse(0,0,1));
+                    $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                     new loadMenu($this, $player, [0, $this->corner[1]], $this->matrix);
                 } else {
                     $sound->moveRightLeft($player);
                     $this->corner[1] += 7;
-                    $this->menu->getInventory()->setItem(52, VanillaItems::AIR());
-                    $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                    $this->menu->getInventory()->setItem(52, LegacyStringToItemParser::getInstance()->parse(0,0,1));
+                    $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                     new loadMenu($this, $player, [0, $this->corner[1]], $this->matrix);
                 }
             }
         }else{
-            $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§a§l【 §fThông báo §a】");
-            $item->setLore(["§r§cHành động đó không được phép, nếu bạn có ý định lấy\n§r§cđồ trong seasonpass, hãy nhấn vô vật phẩm bạn muốn lấy\n§r§csau đó nhấn vô khoảng trống ngoài menu seasonpass"]);
+            $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+            $item->setLore(["§r§cThat action is not allowed, if you intend to get\n§r§citems in the seasonpass, click on the item you want to get\n§r§cthen click on the empty space outside the seasonpass menu"]);
             $this->menu->getInventory()->setItem(52, $item);
             $sound = new soundHandle($this);
             $sound->illigelSound($player);
-            $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+            $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
         }
     }
     public  function takeItem(int $type,int $y,Player $player,$menu){
@@ -147,29 +146,29 @@ class menuHandle implements Listener
 
         //Linh động giữa việc dùng perm hoặc dùng mảng nhét tên vào
         if($type == 1 and !$player->hasPermission("seasonpass.royalpass")){
-            $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§a§l【 §fThông báo §a】");
-            $item->setLore(["§r§cBạn không có quyền lấy vật phẩm ở thẻ huyền thoại"]);
+            $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+            $item->setLore(["§r§cYou are not allowed to get items in legendary cards"]);
             $menu->getInventory()->setItem(52, $item);
             $sound = new soundHandle($this);
             $sound->dontHavePerm($player);
-            $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+            $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
             return;
         }
         if((int) $level < $this->cmds->ssp->getConfig()->getNested("marker")[$txt][$y]){
             $a = $this->cmds->ssp->getConfig()->getNested("marker")[$txt][$y];
-            $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§a§l【 §fThông báo §a】");
-            $item->setLore(["§r§cBạn đang level [$level] nhưng vật phẩm này yêu cầu mức độ [$a]"]);
+            $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+            $item->setLore(["§r§cYou are level [$level] but this item requires level [$a]"]);
             $menu->getInventory()->setItem(52, $item);
             $sound = new soundHandle($this);
             $sound->notEnoughLevel($player);
-            $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+            $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
             return;
         }
         if(isset($this->cmds->ssp->getConfig()->getNested($txt)[$y])){
 
                 if(!isset($this->cmds->ssp->getConfig()->getNested("database")[$player->getName()][$type][$y])){
                     $item = $this->cmds->ssp->getConfig()->getNested($txt)[$y];
-                    $item = Item::legacyJsonDeserialize($item);
+                    $item = Item::jsonDeserialize($item);
                     $sound = new soundHandle($this);
                     if($player->getInventory()->canAddItem($item)){
                         $player->getInventory()->addItem($item);
@@ -178,39 +177,39 @@ class menuHandle implements Listener
                         if($type == 0){
                             $sound->normalTaken($player);
                             $sound->water($player);
-                            $menu->getInventory()->setItem($y - $this->corner[1] +9 + 2, VanillaBlocks::REDSTONE_LAMP()->asItem());
+                            $menu->getInventory()->setItem($y - $this->corner[1] +9 + 2, LegacyStringToItemParser::getInstance()->parse(241, 5, 1));
                             $this->matrix[0+1][$y] = "taken";
                             $this->cmds->ssp->getServer()->broadcastMessage("§a§l【Ｓeason Ｐass】 §r§f➢ §eXin chúc mừng §c[".$player->getName()."]§e đã lấy §c[Item $y] §etrong §fTHẺ THÔNG THƯỜNG");
-                            $item = VanillaItems::BANNER()->setColor(DyeColor::YELLOW)->setCustomName("§r§a§l【 §fChúc Mừng §a】");
-                            $item->setLore(["§r§6Bạn đã lấy một mục trong thẻ §fthông thường"]);
+                            $item = LegacyStringToItemParser::getInstance()->parse(325, 4, 1)->setCustomName("§r§a§l【 §fChúc Mừng §a】");
+                            $item->setLore(["§r§6You have taken an item in the §fregular tag"]);
                             $menu->getInventory()->setItem(52,$item);
-                            $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                            $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                         }else{
                             $sound->royalTaken($player);
                             $sound->water($player);
-                            $menu->getInventory()->setItem($y - $this->corner[1] +36 + 2, VanillaBlocks::REDSTONE_LAMP()->asItem());
+                            $menu->getInventory()->setItem($y - $this->corner[1] +36 + 2, LegacyStringToItemParser::getInstance()->parse(241, 5, 1));
                             $this->matrix[3+1][$y] = "taken";
                             $this->cmds->ssp->getServer()->broadcastMessage("§a§l【Ｓeason Ｐass】 §r§f➢ §eXin chúc mừng §c[".$player->getName()."]§e đã lấy §c[Item $y] §etrong §6THẺ HUYỀN THOẠI");
-                            $item = VanillaBlocks::BANNER()->setColor(DyeColor::LIME)->setCustomName("§r§a§l【 §fChúc Mừng §a】");
-                            $item->setLore(["§r§6Bạn đã lấy một mục trong thẻ §ehuyền thoại"]);
+                            $item = LegacyStringToItemParser::getInstance()->parse(325, 5, 1)->setCustomName("§r§a§l【 §fChúc Mừng §a】");
+                            $item->setLore(["§r§6You have taken an item from the §elegendary tag"]);
                             $menu->getInventory()->setItem(52,$item);
-                            $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                            $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                         }
                         return;
                     }else{
                         $sound->illigelSound($player);
                         $player->removeCurrentWindow();
-                        $player->sendMessage("§r§cKhông có vị trí trống trong kho của bạn, vui lòng dọn ít đồ rồi thử lại");
+                        $player->sendMessage("§r§cThere are no empty slots in your inventory, please clear some items and try again.");
                         $this->name = null;
                         return;
                     }
                 }else{
                     $sound = new soundHandle($this);
                     $sound->alreadyTaken($player);
-                    $item = VanillaBlocks::OAK_TRAPDOOR()->asItem()->setCustomName("§r§a§l【 §fThông báo §a】");
-                    $item->setLore(["§r§cBạn đã nhận được vật phẩm đó"]);
+                    $item = LegacyStringToItemParser::getInstance()->parse(76, 0, 1)->setCustomName("§r§a§l【 §fThông báo §a】");
+                    $item->setLore(["§r§cYou have received that item."]);
                     $menu->getInventory()->setItem(52, $item);
-                    $player->getCursorInventory()->setItem(0, VanillaItems::AIR());
+                    $player->getCursorInventory()->setItem(0, LegacyStringToItemParser::getInstance()->parse(0, 0, 0));
                     return;
                 }
 
@@ -218,7 +217,7 @@ class menuHandle implements Listener
             $sound = new soundHandle($this);
             $sound->illigelSound($player);
             $player->removeCurrentWindow();
-            $player->sendMessage("§r§cĐã xảy ra lỗi, vui lòng thông báo cho admin. Thẻ mùa ID: pass2");
+            $player->sendMessage("§r§cAn error occurred, please notify the admin. Season card ID: pass2");
             return;
         }
     }
