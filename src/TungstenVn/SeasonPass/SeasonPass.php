@@ -15,11 +15,19 @@ class SeasonPass extends PluginBase implements Listener {
 
     public $levelApi;
 
+    public static self $instance;
+
+    public static function getInstance(): self {
+        return self::$instance;
+    }
+
 	public function onEnable() : void {
+        self::$instance = $this;
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
         if(!InvMenuHandler::isRegistered()){
             InvMenuHandler::register($this);
         }
+
         $this->levelApi = $this->getServer()->getPluginManager()->getPlugin("MineLevel");
         if($this->levelApi == null){
             $this->getServer()->getLogger()->info("\n\n§cSeasonPass >API cấp bị thiếu, không thể bật plugin\n");

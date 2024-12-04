@@ -42,7 +42,7 @@ class setItemInfo
             return null;
         }
         $item = $sender->getInventory()->getItemInHand();
-        if ($item->getId() == 0){
+        if ($item->getTypeId() === 0){
             $sender->sendMessage("You must be holding an item!");
             return null;
         }

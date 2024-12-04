@@ -2,6 +2,8 @@
 
 namespace TungstenVn\SeasonPass\menuHandle;
 
+use pocketmine\block\utils\DyeColor;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\item\VanillaItems;
@@ -36,14 +38,14 @@ class loadMenu
                     } else if ($matrix[$x][$y] == "n") {
                         $mnh->menu->getInventory()->setItem($slotId, VanillaItems::AIR());
                     } else if ($matrix[$x][$y] == "taken") {
-                        $mnh->menu->getInventory()->setItem($slotId, ItemFactory::getInstance()->get(241, 5, 1));
+                        $mnh->menu->getInventory()->setItem($slotId, VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::GREEN));
                     } else if ($matrix[$x][$y] == "none") {
-                        $mnh->menu->getInventory()->setItem($slotId, ItemFactory::getInstance()->get(241, 14, 1));
+                        $mnh->menu->getInventory()->setItem($slotId, VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED));
                     } else if ($matrix[$x][$y] == "crossline") {
-                        $mnh->menu->getInventory()->setItem($slotId, ItemFactory::getInstance()->get(399, 0, 1));
+                        $mnh->menu->getInventory()->setItem($slotId, VanillaItems::PAPER());
                     }
                 } else {
-                    $mnh->menu->getInventory()->setItem($slotId, ItemFactory::getInstance()->get(0, 0, 0));
+                    $mnh->menu->getInventory()->setItem($slotId, VanillaItems::AIR());
                 }
             }
         }

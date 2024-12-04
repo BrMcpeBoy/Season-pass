@@ -21,7 +21,7 @@ class removeItem
                 $sender->sendMessage("There is no item on that slot");
                 return;
             }else{
-                $name = Item::jsonDeserialize($normalPass[$value[1]])->getName();
+                $name = Item::legacyJsonDeserialize($normalPass[$value[1]])->getName();
                 unset($normalPass[$value[1]]);
                 $cmds->ssp->getConfig()->setNested("normalPass",$normalPass);
                 $cmds->ssp->getConfig()->save();
@@ -34,7 +34,7 @@ class removeItem
                 $sender->sendMessage("There is no item on that slot");
                 return;
             }else{
-                 $name = Item::jsonDeserialize($royalPass[$value[1]])->getName();
+                 $name = Item::legacyJsonDeserialize($royalPass[$value[1]])->getName();
                 unset($royalPass[$value[1]]);
                 $cmds->ssp->getConfig()->setNested("royalPass",$royalPass);
                 $cmds->ssp->getConfig()->save();

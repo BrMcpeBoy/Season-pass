@@ -17,7 +17,7 @@ use jojoe77777\FormAPI\SimpleForm;
 class commands extends Command implements PluginOwned, Listener {
 
     /*  Main Class (SeasonPass) */
-    public $ssp;
+    public SeasonPass $ssp;
 
     public function __construct(SeasonPass $ssp){
         parent::__construct("seasonpass", "Season Pass", ("/seasonpass help"), ["ssp"]);

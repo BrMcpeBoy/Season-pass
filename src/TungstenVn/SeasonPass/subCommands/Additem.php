@@ -4,8 +4,8 @@ namespace TungstenVn\SeasonPass\subCommands;
 
 use TungstenVn\SeasonPass\commands\commands;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
 use pocketmine\player\Player;
+use TungstenVn\SeasonPass\SeasonPass;
 
 class addItem {
 
@@ -24,17 +24,17 @@ class addItem {
             //$item = utf8_encode(serialize($item));
             //$array[$idSlot] = $item;
             $array[$idSlot] = $item->jsonSerialize();
-            $cmds->ssp->getConfig()->setNested("normalPass", $array);
-            $cmds->ssp->getConfig()->save();
-            $sender->sendMessage("Thêm đồ vào thẻ thông thường thành công");
+//            $cmds->ssp->getConfig()->setNested("normalPass", $array);
+//            $cmds->ssp->getConfig()->save();
+//            $sender->sendMessage("Thêm đồ vào thẻ thông thường thành công");
            } else {
             $array = $cmds->ssp->getConfig()->getNested('royalPass');
             //$item = utf8_encode(serialize($item));
             //$array[$idSlot] = $item;
             $array[$idSlot] = $item->jsonSerialize();
-            $cmds->ssp->getConfig()->setNested("royalPass", $array);
-            $cmds->ssp->getConfig()->save();
-            $sender->sendMessage("Thêm đồ vào thẻ huyền thoại thành công");
+//            SeasonPass::getInstance()->getConfig()->setNested("royalPass", $array);
+//            $cmds->ssp->getConfig()->save();
+//            $sender->sendMessage("Thêm đồ vào thẻ huyền thoại thành công");
         }
      }
 
@@ -44,7 +44,7 @@ class addItem {
             return null;
         }
         $item = $sender->getInventory()->getItemInHand();
-        if ($item->getId() == 0){
+        if ($item->getTypeId() == 0){
             $sender->sendMessage("Bạn phải cầm 1 vật phẩm!");
             return null;
         }
